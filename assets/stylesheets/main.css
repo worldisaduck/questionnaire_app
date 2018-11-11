@@ -1,0 +1,167 @@
+@font-face {
+  font-family: AvantGardeDemi;
+  src: url('../fonts/avant_garde_demi.woff');
+}
+
+@font-face {
+  font-family: DigitalClock;
+  src: url('../fonts/digital-7.regular.ttf') format('truetype');
+}
+
+#preload-1 { background-image: url(../images/background_1.jpg) no-repeat -9999px -9999px; }
+#preload-2 { background-image: url(../images/background_2.jpg) no-repeat -9999px -9999px; }
+#preload-3 { background-image: url(../images/background_3.jpg) no-repeat -9999px -9999px; }
+#preload-3 { background-image: url(../images/background_4.jpg) no-repeat -9999px -9999px; }
+#preload-3 { background-image: url(../images/background_5.jpg) no-repeat -9999px -9999px; }
+
+body {
+  font-size: 16px;
+  font-family: AvantGardeDemi;
+  font-weight: normal; 
+  background-image: url('../images/background_1.jpg');
+  color: #FFFFFF;
+}
+
+.container-fluid {
+  width: 80%;
+  margin-top: 150px;
+  font-size: 2.2em;
+}
+
+h1 {
+  font-weight: lighter;
+}
+
+#header {
+  font-size: 0.6em;
+}
+
+#header-logo {
+
+}
+
+#unlock-potential-img {
+  width: 26%;
+  height: auto;
+}
+
+
+.button {
+  position: absolute;
+}
+
+#next-question-btn {
+  font-family: AvantGardeDemi;
+  font-size: 0.9em;
+  color: #FFFFFF;
+  background-color: #ad42f4;
+  border: 1px solid #ad42f4;
+  border-radius: 7px;
+  position: relative;
+  top: 0px;
+  width: 250px;
+  height: 55px;
+}
+
+#next-question-btn:active {
+  top: 3px;
+}
+
+#next-question-btn:hover {
+  color: #ffc77f;
+}
+
+.answer {
+  margin-bottom: 15px;
+}
+
+.answer:hover {
+  color: #ffc77f;
+}
+
+.answer > label {
+  cursor: pointer;
+}
+
+#timer {
+  font-family: DigitalClock;
+  font-size: 3.5em;
+  position: absolute;
+  bottom: 2%;
+  color: #ffc77f;
+  display: none;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+
+input[type="radio"]:checked+label {
+  color: #83b1fc;
+}
+
+#start-btn {
+    width: 270px;
+    padding: 20px;
+    margin: 220px auto;
+    border: 1px solid #a759af;
+    -webkit-animation: breathing 3s ease-out infinite normal;
+    animation: breathing 3s ease-out infinite normal;
+    font-size: 24px;
+    background: #a759af;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    }
+
+
+@-webkit-keyframes breathing {
+  0% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+
+  25% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  60% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+
+  100% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+}
+
+@keyframes breathing {
+  0% {
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+
+  25% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+
+  60% {
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+
+  100% {
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+}
