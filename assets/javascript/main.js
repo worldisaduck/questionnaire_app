@@ -114,6 +114,7 @@ window.onload = function() {
 
     function changeQuestion() {
       var currentAnswers = possibleAnswers[currentQuestionIndex];
+      if (possibleAnswers.lentgh == currentQuestionIndex) finishQuestionnaire();
       var questionNumber = currentQuestionIndex + 1;
       questionTitle.innerHTML = 'Q' + questionNumber;
       questionText.innerHTML = questions[currentQuestionIndex];
@@ -129,6 +130,12 @@ window.onload = function() {
     function recordAnswer(answer) {
       usersAnswers.push(answer);
       currentQuestionIndex += 1;
+    }
+
+    function finishQuestionnaire() {
+      var h2 = document.createElement('h2');
+      h2.innerHTML = 'Thank you!';
+      var finalMessageNode = mainContent.innerHTML = h2;
     }
   }
 }
