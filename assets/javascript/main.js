@@ -29,31 +29,37 @@ window.onload = function() {
   var mainContent = document.getElementById('body-content');
   var startBtn = document.getElementById('start-btn');
 
+  var timerNode = document.getElementById("timer");
+  var timerActive = false;
+
   startBtn.addEventListener('click', startQuestionnaire);
 
   function startTimer() {
-    var timerNode = document.getElementById("timer");
-    timerNode.style.display = 'block';
-    var time = timerNode.innerHTML;
-    var arr = time.split(":");
-    var m = parseInt(arr[0]);
-    var s = parseInt(arr[1]);
-    if (s == 0) {
-      m -= 1;
-      s = 60;
-      if (m == 0) m = 4;
+    if (timerActive) {
+      timerNode.style.display = 'block';
+      var time = timerNode.innerHTML;
+      var arr = time.split(":");
+      var m = parseInt(arr[0]);
+      var s = parseInt(arr[1]);
+      if (s == 0) {
+        m -= 1;
+        s = 60;
+        if (m == 0) m = 4;
+      } else {
+        s -= 1;
+      }
+
+      m = JSON.stringify(m);
+      s = JSON.stringify(s);
+
+      if (m.length == 1) m = 0 + m;
+      if (s.length == 1) s = 0 + s;
+
+      document.getElementById("timer").innerHTML = m + ":" + s;
+      setTimeout(startTimer, 1000);
     } else {
-      s -= 1;
+      return;
     }
-
-    m = JSON.stringify(m);
-    s = JSON.stringify(s);
-
-    if (m.length == 1) m = 0 + m;
-    if (s.length == 1) s = 0 + s;
-
-    document.getElementById("timer").innerHTML = m + ":" + s;
-    setTimeout(startTimer, 1000);
   }
 
   function startQuestionnaire() {
@@ -110,11 +116,12 @@ window.onload = function() {
       recordAnswer(answersForm.elements['answer'].value);
       changeQuestion();
     });
+    timerActive = true;
     startTimer();
 
     function changeQuestion() {
       var currentAnswers = possibleAnswers[currentQuestionIndex];
-      if (possibleAnswers.lentgh == currentQuestionIndex) finishQuestionnaire();
+      if (questions.length == currentQuestionIndex) finishQuestionnaire();
       var questionNumber = currentQuestionIndex + 1;
       questionTitle.innerHTML = 'Q' + questionNumber;
       questionText.innerHTML = questions[currentQuestionIndex];
@@ -135,8 +142,10 @@ window.onload = function() {
     function finishQuestionnaire() {
       var h2 = document.createElement('h2');
       h2.innerHTML = 'Thank you!';
-      var finalMessageNode = mainContent.innerHTML = h2;
+      mainContent.innerHTML = '';
+      mainContent.appendChild(h2);
+      timerNode.style.display = 'none';
+      timerActive = false;
     }
   }
 }
-
