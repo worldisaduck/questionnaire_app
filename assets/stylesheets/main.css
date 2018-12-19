@@ -17,7 +17,7 @@
 body {
   font-size: 16px;
   font-family: AvantGardeDemi;
-  font-weight: normal; 
+  font-weight: normal;
   background-image: url('../images/background_1.jpg');
   color: #FFFFFF;
 }
@@ -54,7 +54,7 @@ h1 {
   font-family: AvantGardeDemi;
   font-size: 0.9em;
   color: #FFFFFF;
-  background-color: #ad42f4;
+  background-color: #a759af;
   border: 1px solid #ad42f4;
   border-radius: 7px;
   position: relative;
@@ -102,9 +102,9 @@ input[type="radio"]:checked+label {
 }
 
 #start-btn {
-    width: 270px;
+    width: 450px;
     padding: 20px;
-    margin: 160px auto;
+    margin: 80px auto;
     border: 1px solid #a759af;
     -webkit-animation: breathing 3s ease-out infinite normal;
     animation: breathing 3s ease-out infinite normal;
