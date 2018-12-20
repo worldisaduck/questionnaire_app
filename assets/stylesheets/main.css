@@ -167,7 +167,6 @@ input[type="radio"]:checked+label {
 }
 
 #question-3-image {
-  display: none;
   margin-bottom: 25px;
 }
 

@@ -111,7 +111,7 @@ window.onload = function() {
 
   function startQuestionnaire() {
     var currentQuestionIndex = 0;
-    var currentQuestionNumber = 0
+    var currentQuestionNumber = 1
     renderQuestion(currentQuestionNumber, questions[currentQuestionIndex], possibleAnswers[currentQuestionIndex]);
 
     window.timerActive = true;
@@ -121,11 +121,6 @@ window.onload = function() {
       currentQuestionIndex += 1
       currentQuestionNumber += 1;
 
-      if (currentQuestionNumber == 3) {
-        document.getElementById('question-3-image').style.display = 'block';
-      } else {
-        document.getElementById('question-3-image').style.display = 'none';
-      }
       document.querySelector('body').style.backgroundImage = 'url("assets/images/background_' + currentQuestionNumber + '.jpg")'
       if (questions.length == currentQuestionIndex) finishQuestionnaire();
 
@@ -134,6 +129,7 @@ window.onload = function() {
         questions[currentQuestionIndex],
         possibleAnswers[currentQuestionIndex]
       );
+
       resetTimer();
     }
 
@@ -164,7 +160,7 @@ window.onload = function() {
         </div>
         <div class="col-10" id="question-text">
           <h3>` + questionText + `</h3>
-          <div id="question-3-image">
+          <div id="question-3-image" style="display: ` + (questionNum == 3 ? `block;` : `none;`) + `"">
             <img src="assets/images/question_3.png"></img>
           </div>
         </div>
@@ -206,7 +202,6 @@ window.onload = function() {
         event.preventDefault();
         var currentAnswer = answersForm.elements['answer'].value;
         if (!currentAnswer == '') {
-          console.log(currentAnswer);
           recordAnswer(currentAnswer);
           changeQuestion();
         } else {
