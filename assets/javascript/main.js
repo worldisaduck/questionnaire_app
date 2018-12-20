@@ -28,6 +28,7 @@ img5.src = "assets/images/background_5.jpg";
 window.onload = function() {
   var mainContent = document.getElementById('body-content');
   var startBtn = document.getElementById('start-btn');
+  window.timerActive = false;
 
   var timerNode = document.getElementById("timer");
 
@@ -37,7 +38,6 @@ window.onload = function() {
     event.preventDefault();
     var page = this.getAttribute('data-page');
     if (page == 'initial') {
-      console.log();
       document.querySelector('p.changing-text').innerHTML = `You'll be asked 4 multiple-choice questions, and you have <b>15</b> seconds to answer each.
         Each option you chose corresponds to a digit on the safe's padlock. Get all 4 answers
         correct and unlock the safe! Simple.`
@@ -49,9 +49,13 @@ window.onload = function() {
   }
 
   function startTimer() {
-    if (timerActive) {
-      timerNode.style.display = 'block';
-      var time = timerNode.innerHTML;
+    if (!window.timerActive) return
+    timerNode.style.display = 'block';
+    var time = timerNode.innerHTML;
+    if (time == '00:00') {
+      console.log('Whoops, you\'ve ran out of time!');
+      window.timerActive = false;
+    } else {
       var arr = time.split(":");
       var m = parseInt(arr[0]);
       var s = parseInt(arr[1]);
@@ -70,14 +74,14 @@ window.onload = function() {
       if (s.length == 1) s = 0 + s;
 
       document.getElementById("timer").innerHTML = m + ":" + s;
-      setTimeout(startTimer, 1000);
-    } else {
-      return;
     }
+    setTimeout(startTimer, 1000);
   }
 
   function resetTimer() {
-    document.getElementById('timer').innerHTML = '00:16'
+    window.timerActive = false;
+    document.getElementById('timer').innerHTML = '00:15';
+    window.timerActive = true;
   }
 
   function startQuestionnaire() {
@@ -88,6 +92,9 @@ window.onload = function() {
         </div>
         <div class="col-10" id="question-text">
           <h3>Who is the current Mayor of London (and a University of Law graduate)?</h3>
+          <div id="question-3-image">
+            <img src="assets/images/question_3.png"></img>
+          </div>
         </div>
       </div>
       <form id="answers-form">
@@ -131,18 +138,26 @@ window.onload = function() {
 
     answersForm.addEventListener('submit', function(event) {
       event.preventDefault();
-      recordAnswer(answersForm.elements['answer'].value);
-      changeQuestion();
+      if (!answersForm.elements['answer'].value == '') {
+        recordAnswer(answersForm.elements['answer'].value);
+        changeQuestion();
+      } else {
+        return;
+      }
     });
-    timerActive = true;
+    window.timerActive = true;
     startTimer();
 
     function changeQuestion() {
-
       var currentAnswers = possibleAnswers[currentQuestionIndex];
       var questionNumber = currentQuestionIndex + 1;
       questionTitle.innerHTML = 'Q' + questionNumber;
       questionText.innerHTML = questions[currentQuestionIndex];
+      if (questionNumber == 3) {
+        document.getElementById('question-3-image').style.display = 'block';
+      } else {
+        document.getElementById('question-3-image').style.display = 'none';
+      }
       document.querySelector('body').style.backgroundImage = 'url("assets/images/background_' + questionNumber + '.jpg")'
       if (questions.length == currentQuestionIndex) finishQuestionnaire();
 
@@ -157,7 +172,6 @@ window.onload = function() {
     function recordAnswer(answer) {
       usersAnswers.push(answer);
       currentQuestionIndex += 1;
-      console.log(currentQuestionIndex);
     }
 
     function finishQuestionnaire() {
@@ -173,7 +187,7 @@ window.onload = function() {
       mainContent.innerHTML = '';
       mainContent.appendChild(h2);
       timerNode.style.display = 'none';
-      timerActive = false;
+      window.timerActive = false;
     }
   }
 }

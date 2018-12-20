@@ -98,7 +98,7 @@ input[type="radio"] {
 
 
 input[type="radio"]:checked+label {
-  color: #83b1fc;
+  color: #ff9ea2;
 }
 
 #start-btn {
@@ -164,4 +164,14 @@ input[type="radio"]:checked+label {
     -ms-transform: scale(0.9);
     transform: scale(0.9);
   }
+}
+
+#question-3-image {
+  display: none;
+  margin-bottom: 25px;
+}
+
+#question-3-image img {
+  width: 60%;
+  height: auto;
 }
