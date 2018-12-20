@@ -1,3 +1,16 @@
+var startingPageHTML = `
+<div class="row justify-content-start" id="info-text" style="width: 90%; margin: 0px auto 0px auto;">
+  <div class="col-12" style="margin-top: 100px;">
+    <p class="changing-text">
+      4 questions.<br>
+      4 digits.<br>
+      Can you open the safe?
+    </p>
+  </div>
+</div>
+<div data-page="initial"  id="start-btn">(touch screen to continue)</div>
+`;
+
 var questions = [
   'Who is the current Mayor of London (and a University of Law graduate)?',
   'Take the number 30, divide it by 1/2, and then add 10. What do you get?',
@@ -27,6 +40,7 @@ img5.src = "assets/images/background_5.jpg";
 
 window.onload = function() {
   var mainContent = document.getElementById('body-content');
+  mainContent.innerHTML = startingPageHTML;
   var startBtn = document.getElementById('start-btn');
   window.timerActive = false;
 
@@ -54,7 +68,7 @@ window.onload = function() {
     var time = timerNode.innerHTML;
     if (time == '00:00') {
       window.timerActive = false;
-      var sorryMsg =
+      var timeRanOutMsg =
        '<div style="width: 50%; margin: auto; text-align: center;">' +
           '<p style=margin: 25px;>' +
             'Whoops, you\'ve ran out of time!' +
@@ -62,7 +76,7 @@ window.onload = function() {
         '</div>';
 
       var h2 = document.createElement('h2');
-      h2.innerHTML = sorryMsg;
+      h2.innerHTML = timeRanOutMsg;
       mainContent.innerHTML = '';
       mainContent.appendChild(h2);
       timerNode.style.display = 'none';
@@ -96,93 +110,35 @@ window.onload = function() {
   }
 
   function startQuestionnaire() {
-    var initialHTML = `
-      <div class="row" id="question">
-        <div class="col-1">
-          <h1 id="question-title">Q1</h1>
-        </div>
-        <div class="col-10" id="question-text">
-          <h3>Who is the current Mayor of London (and a University of Law graduate)?</h3>
-          <div id="question-3-image">
-            <img src="assets/images/question_3.png"></img>
-          </div>
-        </div>
-      </div>
-      <form id="answers-form">
-        <div class="row" id="answers">
-          <div class="col-md-8 offset-md-1">
-            <div class="answer">
-              <input type="radio" name="answer" id="answer1" value="1">
-                <label for="answer1">1. <span>Boris Jhonson</span></label>
-            </div>
-
-            <div class="answer">
-                <input type="radio" name="answer" id="answer2" value="2">
-                <label for="answer2">2. <span>Sadiq Khan</span></label>
-              </div>
-
-              <div class="answer">
-                <input type="radio" name="answer" id="answer3" value="3">
-                <label for="answer3">3. <span>Zac Goldsmith</span></label>
-            </div>
-
-            <div class="answer">
-                <input type="radio" name="answer" id="answer4" value="4">
-                <label for="answer4">4. <span>Alan Sugar</span></label>
-              </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 offset-md-9">
-            <input type="submit" id="next-question-btn" value="next question">
-          </div>
-        </div>
-      </form>
-    `;
-    mainContent.innerHTML = initialHTML;
-    var questionTitle = document.getElementById('question-title');
-    var questionText = document.getElementById('question-text').childNodes[1];
     var currentQuestionIndex = 0;
+    var currentQuestionNumber = 0
+    renderQuestion(currentQuestionNumber, questions[currentQuestionIndex], possibleAnswers[currentQuestionIndex]);
 
-    var answersForm = document.getElementById('answers-form');
-    var answerNodes = document.querySelectorAll('input[name="answer"]');
-
-    answersForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      if (!answersForm.elements['answer'].value == '') {
-        recordAnswer(answersForm.elements['answer'].value);
-        changeQuestion();
-      } else {
-        return;
-      }
-    });
     window.timerActive = true;
     startTimer();
 
     function changeQuestion() {
-      var currentAnswers = possibleAnswers[currentQuestionIndex];
-      var questionNumber = currentQuestionIndex + 1;
-      questionTitle.innerHTML = 'Q' + questionNumber;
-      questionText.innerHTML = questions[currentQuestionIndex];
-      if (questionNumber == 3) {
+      currentQuestionIndex += 1
+      currentQuestionNumber += 1;
+
+      if (currentQuestionNumber == 3) {
         document.getElementById('question-3-image').style.display = 'block';
       } else {
         document.getElementById('question-3-image').style.display = 'none';
       }
-      document.querySelector('body').style.backgroundImage = 'url("assets/images/background_' + questionNumber + '.jpg")'
+      document.querySelector('body').style.backgroundImage = 'url("assets/images/background_' + currentQuestionNumber + '.jpg")'
       if (questions.length == currentQuestionIndex) finishQuestionnaire();
 
-      for (i = 0; i < 4; i++) {
-        var currentAnswer = answerNodes[i];
-        currentAnswer.checked = false;
-        currentAnswer.labels[0].childNodes[1].innerHTML = currentAnswers[i]
-      }
+      renderQuestion(
+        currentQuestionNumber,
+        questions[currentQuestionIndex],
+        possibleAnswers[currentQuestionIndex]
+      );
       resetTimer();
     }
 
     function recordAnswer(answer) {
       usersAnswers.push(answer);
-      currentQuestionIndex += 1;
     }
 
     function finishQuestionnaire() {
@@ -199,6 +155,64 @@ window.onload = function() {
       mainContent.appendChild(h2);
       timerNode.style.display = 'none';
       window.timerActive = false;
+    }
+
+    function renderQuestion(questionNum, questionText, answers) {
+      mainContent.innerHTML = `<div class="row" id="question">
+        <div class="col-1">
+          <h1 id="question-title">Q` + questionNum + `</h1>
+        </div>
+        <div class="col-10" id="question-text">
+          <h3>` + questionText + `</h3>
+          <div id="question-3-image">
+            <img src="assets/images/question_3.png"></img>
+          </div>
+        </div>
+      </div>
+      <form id="answers-form">
+        <div class="row" id="answers">
+          <div class="col-md-8 offset-md-1">
+            <div class="answer">
+              <input type="radio" name="answer" id="answer1" value="1">
+                <label for="answer1">1. <span>` + answers[0] + `</span></label>
+            </div>
+
+            <div class="answer">
+                <input type="radio" name="answer" id="answer2" value="2">
+                <label for="answer2">2. <span>` + answers[1] + `</span></label>
+              </div>
+
+              <div class="answer">
+                <input type="radio" name="answer" id="answer3" value="3">
+                <label for="answer3">3. <span>` + answers[2] +  `</span></label>
+            </div>
+
+            <div class="answer">
+                <input type="radio" name="answer" id="answer4" value="4">
+                <label for="answer4">4. <span>` + answers[3] + `</span></label>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 offset-md-9">
+            <input type="submit" id="next-question-btn" value="next question">
+          </div>
+        </div>
+      </form>`;
+
+      var answersForm = document.getElementById('answers-form');
+
+      answersForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var currentAnswer = answersForm.elements['answer'].value;
+        if (!currentAnswer == '') {
+          console.log(currentAnswer);
+          recordAnswer(currentAnswer);
+          changeQuestion();
+        } else {
+          return;
+        }
+      });
     }
   }
 }
