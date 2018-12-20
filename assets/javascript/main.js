@@ -53,8 +53,19 @@ window.onload = function() {
     timerNode.style.display = 'block';
     var time = timerNode.innerHTML;
     if (time == '00:00') {
-      console.log('Whoops, you\'ve ran out of time!');
       window.timerActive = false;
+      var sorryMsg =
+       '<div style="width: 50%; margin: auto; text-align: center;">' +
+          '<p style=margin: 25px;>' +
+            'Whoops, you\'ve ran out of time!' +
+          '</p>' +
+        '</div>';
+
+      var h2 = document.createElement('h2');
+      h2.innerHTML = sorryMsg;
+      mainContent.innerHTML = '';
+      mainContent.appendChild(h2);
+      timerNode.style.display = 'none';
     } else {
       var arr = time.split(":");
       var m = parseInt(arr[0]);
