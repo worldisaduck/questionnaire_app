@@ -101,7 +101,7 @@ input[type="radio"]:checked+label {
   color: #ff9ea2;
 }
 
-#start-btn {
+.purple-btn {
     width: 450px;
     padding: 20px;
     margin: 80px auto;

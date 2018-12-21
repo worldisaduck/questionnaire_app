@@ -1,16 +1,3 @@
-var startingPageHTML = `
-<div class="row justify-content-start" id="info-text" style="width: 90%; margin: 0px auto 0px auto;">
-  <div class="col-12" style="margin-top: 100px;">
-    <p class="changing-text">
-      4 questions.<br>
-      4 digits.<br>
-      Can you open the safe?
-    </p>
-  </div>
-</div>
-<div data-page="initial"  id="start-btn">(touch screen to continue)</div>
-`;
-
 var questions = [
   'Who is the current Mayor of London (and a University of Law graduate)?',
   'Take the number 30, divide it by 1/2, and then add 10. What do you get?',
@@ -40,27 +27,9 @@ img5.src = "assets/images/background_5.jpg";
 
 window.onload = function() {
   var mainContent = document.getElementById('body-content');
-  mainContent.innerHTML = startingPageHTML;
-  var startBtn = document.getElementById('start-btn');
-  window.timerActive = false;
-
   var timerNode = document.getElementById("timer");
-
-  startBtn.addEventListener('click', proceed);
-
-  function proceed(event) {
-    event.preventDefault();
-    var page = this.getAttribute('data-page');
-    if (page == 'initial') {
-      document.querySelector('p.changing-text').innerHTML = `You'll be asked 4 multiple-choice questions, and you have <b>15</b> seconds to answer each.
-        Each option you chose corresponds to a digit on the safe's padlock. Get all 4 answers
-        correct and unlock the safe! Simple.`
-      this.setAttribute('data-page', 'secondary');
-      this.innerText = '(touch screen to start)';
-    } else if (page == 'secondary') {
-      startQuestionnaire();
-    }
-  }
+  window.timerActive = false;
+  renderInitialPage();
 
   function startTimer() {
     if (!window.timerActive) return
@@ -73,6 +42,7 @@ window.onload = function() {
           '<p style=margin: 25px;>' +
             'Whoops, you\'ve ran out of time!' +
           '</p>' +
+          '<div data-page="initial" class="purple-btn" id="reset-btn">(Back to start)</div>' +
         '</div>';
 
       var h2 = document.createElement('h2');
@@ -80,6 +50,8 @@ window.onload = function() {
       mainContent.innerHTML = '';
       mainContent.appendChild(h2);
       timerNode.style.display = 'none';
+      var resetBtn = document.getElementById('reset-btn');
+      resetBtn.addEventListener('click', renderInitialPage);
     } else {
       var arr = time.split(":");
       var m = parseInt(arr[0]);
@@ -141,16 +113,18 @@ window.onload = function() {
       var h2 = document.createElement('h2');
       h2.innerHTML =
         '<div style="width: 50%; margin: auto; text-align: center;">' +
-          'Thank you!<br>' +
           'Your 4-digit code is:<br>' +
           '<p style=margin: 25px;>' +
           usersAnswers.join(' ') +
           '</p>' +
+          '<div data-page="initial" class="purple-btn" id="reset-btn">(Back to start)</div>' +
         '</div>';
       mainContent.innerHTML = '';
       mainContent.appendChild(h2);
       timerNode.style.display = 'none';
       window.timerActive = false;
+      var resetBtn = document.getElementById('reset-btn');
+      resetBtn.addEventListener('click', renderInitialPage);
     }
 
     function renderQuestion(questionNum, questionText, answers) {
@@ -209,5 +183,36 @@ window.onload = function() {
         }
       });
     }
+  }
+
+  function renderInitialPage() {
+    resetTimer();
+    usersAnswers = [];
+    mainContent.innerHTML =
+    `<div class="row justify-content-start" id="info-text" style="width: 90%; margin: 0px auto 0px auto;">
+        <div class="col-12" style="margin-top: 100px;">
+          <p class="changing-text">
+            4 questions.<br>
+            4 digits.<br>
+            Can you open the safe?
+          </p>
+        </div>
+      </div>
+      <div data-page="initial" class="purple-btn" id="start-btn">(touch screen to continue)</div>`;
+
+    var startBtn = document.getElementById('start-btn');
+    startBtn.addEventListener('click', function() {
+      event.preventDefault();
+      var page = this.getAttribute('data-page');
+      if (page == 'initial') {
+        document.querySelector('p.changing-text').innerHTML = `You'll be asked 4 multiple-choice questions, and you have <b>15</b> seconds to answer each.
+          Each option you chose corresponds to a digit on the safe's padlock. Get all 4 answers
+          correct and unlock the safe! Simple.`
+        this.setAttribute('data-page', 'secondary');
+        this.innerText = '(touch screen to start)';
+      } else if (page == 'secondary') {
+        startQuestionnaire();
+      }
+    });
   }
 }
